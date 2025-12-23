@@ -13,6 +13,13 @@ Draft → Submitted → Approved/Rejected
 - Expense (aggregate root)
 - AuditEvent (immutable record of important changes)
 
+## Expense
+- Title
+- Amount
+- Currency
+- CostCenter (optional)
+- Receipt (optional)
+
 ## Expense status
 - Draft
 - Submitted
@@ -39,8 +46,9 @@ Forbidden examples:
 
 ## Validation rules (initial)
 - Title/Description is required (min length can be defined later)
-- Receipt is required if Amount >= 100.00 (placeholder threshold, adjustable)
+- Receipt is required if Amount >= 70.00 (placeholder threshold, adjustable)
 - Reject requires a non-empty reason
+- Approver cannot be creator
 
 ## Audit events (minimum fields)
 - ExpenseId
