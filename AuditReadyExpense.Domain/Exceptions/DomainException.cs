@@ -1,10 +1,10 @@
 namespace AuditReadyExpense.Domain.Exceptions;
 
-public class DomainExceptions : Exception
+public class DomainException : Exception
 {
     public DomainErrorCode ErrorCode { get; }
 
-    public DomainExceptions(
+    public DomainException(
         DomainErrorCode errorCode,
         string message
     ) : base(message)

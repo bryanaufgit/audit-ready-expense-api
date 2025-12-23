@@ -3,8 +3,8 @@ namespace AuditReadyExpense.Domain.Exceptions;
 public enum DomainErrorCode
 {
     InvalidStateTransition,
-    MissingRequieredField,
+    MissingRequiredField,
     InvalidAmount,
-    ReceiptReuquired,
+    ReceiptRequired,
     UnauthorizedAction
 }

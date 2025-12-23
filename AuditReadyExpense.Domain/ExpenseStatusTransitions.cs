@@ -18,7 +18,7 @@ internal static class ExpenseStatusTransitions
     {
         if (!AllowedTransitions.TryGetValue(from, out var allowed) || !allowed.Contains(to))
         {
-            throw new DomainExceptions(DomainErrorCode.InvalidStateTransition, $"Transition from {from} ro {to} is not allowed.");
+            throw new DomainException(DomainErrorCode.InvalidStateTransition, $"Transition from {from} ro {to} is not allowed.");
         }
     }
 }

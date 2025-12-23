@@ -14,7 +14,7 @@ public class Expense
     public ExpenseStatus Status { get; private set; }
     public DateTime CreatedAtUtc { get; }
 
-    public IReadOnlyCollection<AuditEvent> AuditEvents => _auditEvents.AsReadOnly();
+    public IReadOnlyList<AuditEvent> AuditEvents => _auditEvents;
 
     private Expense()
     {
