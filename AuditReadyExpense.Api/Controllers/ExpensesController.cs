@@ -95,6 +95,59 @@ public class ExpensesController : ControllerBase
         }
     }
 
+    [HttpPost("{id:guid}/approve")]
+public async Task<IActionResult> Approve([FromRoute] Guid id, CancellationToken ct)
+{
+    try
+    {
+        var actorId = GetActorUserId();
+
+        await _service.ApproveAsync(id, actorId, ct);
+
+        return NoContent();
+    }
+    catch (DomainException ex)
+    {
+        return BadRequest(new { code = ex.ErrorCode.ToString(), message = ex.Message });
+    }
+    catch (ArgumentException ex)
+    {
+        return BadRequest(new { code = "BadRequest", message = ex.Message });
+    }
+    catch (InvalidOperationException)
+    {
+        return NotFound();
+    }
+}
+
+[HttpPost("{id:guid}/reject")]
+public async Task<IActionResult> Reject(
+    [FromRoute] Guid id,
+    [FromBody] RejectExpenseRequest request,
+    CancellationToken ct)
+{
+    try
+    {
+        var actorId = GetActorUserId();
+
+        await _service.RejectAsync(id, actorId, request.Reason, ct);
+
+        return NoContent();
+    }
+    catch (DomainException ex)
+    {
+        return BadRequest(new { code = ex.ErrorCode.ToString(), message = ex.Message });
+    }
+    catch (ArgumentException ex)
+    {
+        return BadRequest(new { code = "BadRequest", message = ex.Message });
+    }
+    catch (InvalidOperationException)
+    {
+        return NotFound();
+    }
+}
+
     private static ExpenseResponse ToResponse(AuditReadyExpense.Domain.Expenses.Expense expense)
         => new()
         {
