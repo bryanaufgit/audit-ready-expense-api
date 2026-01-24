@@ -1,7 +1,6 @@
 using AuditReadyExpense.Api.Contracts;
 using AuditReadyExpense.Application.Contracts;
 using AuditReadyExpense.Application.UseCases;
-using AuditReadyExpense.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuditReadyExpense.Api.Controllers;
@@ -25,7 +24,6 @@ public class ExpensesController : ControllerBase
         if (!Request.Headers.TryGetValue("X-Actor-UserId", out var raw) ||
             !Guid.TryParse(raw.ToString(), out var actorId))
         {
-            // 400 because client didn't provide required data
             throw new ArgumentException("Missing or invalid X-Actor-UserId header (must be a GUID).");
         }
 
@@ -35,29 +33,15 @@ public class ExpensesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ExpenseResponse>> CreateDraft([FromBody] CreateExpenseRequest request, CancellationToken ct)
     {
-        try
-        {
-            var actorId = GetActorUserId();
+        var actorId = GetActorUserId();
 
-            var expense = await _service.CreateDraftAsync(
-                createdByUserId: actorId,
-                title: request.Title,
-                amount: request.Amount,
-                ct: ct);
+        var expense = await _service.CreateDraftAsync(
+            createdByUserId: actorId,
+            title: request.Title,
+            amount: request.Amount,
+            ct: ct);
 
-            return CreatedAtAction(
-                nameof(GetById),
-                new { id = expense.Id },
-                ToResponse(expense));
-        }
-        catch (DomainException ex)
-        {
-            return BadRequest(new { code = ex.ErrorCode.ToString(), message = ex.Message });
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { code = "BadRequest", message = ex.Message });
-        }
+        return CreatedAtAction(nameof(GetById), new { id = expense.Id }, ToResponse(expense));
     }
 
     [HttpGet("{id:guid}")]
@@ -72,33 +56,15 @@ public class ExpensesController : ControllerBase
     [HttpPost("{id:guid}/submit")]
     public async Task<IActionResult> Submit([FromRoute] Guid id, CancellationToken ct)
     {
-        try
-        {
-            var actorId = GetActorUserId();
+        var actorId = GetActorUserId();
 
-            await _service.SubmitAsync(id, actorId, ct);
+        await _service.SubmitAsync(id, actorId, ct);
 
-            return NoContent();
-        }
-        catch (DomainException ex)
-        {
-            return BadRequest(new { code = ex.ErrorCode.ToString(), message = ex.Message });
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { code = "BadRequest", message = ex.Message });
-        }
-        catch (InvalidOperationException)
-        {
-            // thrown when Expense not found (we will replace later with typed exception)
-            return NotFound();
-        }
+        return NoContent();
     }
 
     [HttpPost("{id:guid}/approve")]
-public async Task<IActionResult> Approve([FromRoute] Guid id, CancellationToken ct)
-{
-    try
+    public async Task<IActionResult> Approve([FromRoute] Guid id, CancellationToken ct)
     {
         var actorId = GetActorUserId();
 
@@ -106,27 +72,9 @@ public async Task<IActionResult> Approve([FromRoute] Guid id, CancellationToken 
 
         return NoContent();
     }
-    catch (DomainException ex)
-    {
-        return BadRequest(new { code = ex.ErrorCode.ToString(), message = ex.Message });
-    }
-    catch (ArgumentException ex)
-    {
-        return BadRequest(new { code = "BadRequest", message = ex.Message });
-    }
-    catch (InvalidOperationException)
-    {
-        return NotFound();
-    }
-}
 
-[HttpPost("{id:guid}/reject")]
-public async Task<IActionResult> Reject(
-    [FromRoute] Guid id,
-    [FromBody] RejectExpenseRequest request,
-    CancellationToken ct)
-{
-    try
+    [HttpPost("{id:guid}/reject")]
+    public async Task<IActionResult> Reject([FromRoute] Guid id, [FromBody] RejectExpenseRequest request, CancellationToken ct)
     {
         var actorId = GetActorUserId();
 
@@ -134,19 +82,6 @@ public async Task<IActionResult> Reject(
 
         return NoContent();
     }
-    catch (DomainException ex)
-    {
-        return BadRequest(new { code = ex.ErrorCode.ToString(), message = ex.Message });
-    }
-    catch (ArgumentException ex)
-    {
-        return BadRequest(new { code = "BadRequest", message = ex.Message });
-    }
-    catch (InvalidOperationException)
-    {
-        return NotFound();
-    }
-}
 
     private static ExpenseResponse ToResponse(AuditReadyExpense.Domain.Expenses.Expense expense)
         => new()
