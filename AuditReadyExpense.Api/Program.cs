@@ -18,8 +18,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // DI: Repositories + Use Cases
 builder.Services.AddScoped<IExpenseRepository, EfExpenseRepository>();
 builder.Services.AddScoped<ExpenseWorkflowService>();
+// DI: Middleware
+builder.Services.AddTransient<AuditReadyExpense.Api.Middleware.ExceptionHandlingMiddleware>();
 
 var app = builder.Build();
+app.UseMiddleware<AuditReadyExpense.Api.Middleware.ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
