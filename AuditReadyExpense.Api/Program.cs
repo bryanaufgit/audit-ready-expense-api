@@ -3,13 +3,40 @@ using AuditReadyExpense.Application.UseCases;
 using AuditReadyExpense.Infrastructure.Persistence;
 using AuditReadyExpense.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers + Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuditReadyExpense API", Version = "v1" });
+
+    c.AddSecurityDefinition("ActorHeader", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        Name = "X-Actor-UserId",
+        In = ParameterLocation.Header,
+        Description = "Temporary actor id (GUID). Will be replaced by JWT later."
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ActorHeader"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // DbContext (Postgres)
 builder.Services.AddDbContext<AppDbContext>(options =>
