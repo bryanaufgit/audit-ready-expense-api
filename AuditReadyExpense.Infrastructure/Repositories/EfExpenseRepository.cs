@@ -15,7 +15,9 @@ public class EfExpenseRepository : IExpenseRepository
     }
 
     public Task<Expense?> GetByIdAsync(Guid id, CancellationToken ct = default)
-        => _db.Expenses.FirstOrDefaultAsync(x => x.Id == id, ct);
+        => _db.Expenses
+            .Include("_auditEvents")
+            .FirstOrDefaultAsync(x => x.Id == id, ct);
 
     public Task AddAsync(Expense expense, CancellationToken ct = default)
         => _db.Expenses.AddAsync(expense, ct).AsTask();
