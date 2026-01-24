@@ -82,6 +82,26 @@ public class ExpensesController : ControllerBase
 
         return NoContent();
     }
+    [HttpGet("{id:guid}/audit")]
+    public async Task<ActionResult<IReadOnlyList<AuditEventResponse>>> GetAuditTrail([FromRoute] Guid id, CancellationToken ct)
+    {
+        var expense = await _repo.GetByIdAsync(id, ct);
+        if (expense is null) return NotFound();
+
+        var events = expense.AuditEvents
+            .OrderBy(e => e.OccurredAtUtc)
+            .Select(e => new AuditEventResponse
+            {
+                FromStatus = e.FromStatus,
+                ToStatus = e.ToStatus,
+                ActorUserId = e.ActorUserId,
+                OccurredAtUtc = e.OccurredAtUtc,
+                Reason = e.Reason
+            })
+            .ToList();
+
+        return Ok(events);
+    }
 
     private static ExpenseResponse ToResponse(AuditReadyExpense.Domain.Expenses.Expense expense)
         => new()
