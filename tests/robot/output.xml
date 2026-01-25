@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.0 (Python 3.9.6 on darwin)" generated="2026-01-25T17:59:59.002527" rpa="false" schemaversion="5">
+<suite id="s1" name="Suites" source="/Users/bryanpyka/Projekte/ExpenseAPI/audit-ready-expense-api/tests/robot/suites">
+<suite id="s1-s1" name="Expense Workflow" source="/Users/bryanpyka/Projekte/ExpenseAPI/audit-ready-expense-api/tests/robot/suites/expense_workflow.robot">
+<test id="s1-s1-t1" name="Create Draft Expense" line="9">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.058238" level="INFO">${headers} = {'Content-Type': 'application/json', 'X-Actor-UserId': '11111111-1111-1111-1111-111111111111'}</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>X-Actor-UserId=${USER_ID}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.058025" elapsed="0.000231"/>
+</kw>
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2026-01-25T17:59:59.058489" level="INFO">Creating Session using : alias=api, url=http://localhost:5059, headers={'Content-Type': 'application/json', 'X-Actor-UserId': '11111111-1111-1111-1111-111111111111'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<arg>headers=${headers}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2026-01-25T17:59:59.058348" elapsed="0.000240"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.058776" level="INFO">${payload} = {'title': 'Taxi', 'amount': '42.50'}</msg>
+<var>${payload}</var>
+<arg>title=Taxi</arg>
+<arg>amount=42.50</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.058674" elapsed="0.000115"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-01-25T17:59:59.075632" level="INFO">POST Request : url=http://localhost:5059/api/expenses 
+ path_url=/api/expenses 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'X-Actor-UserId': '11111111-1111-1111-1111-111111111111', 'Content-Length': '36'} 
+ body=b'{"title": "Taxi", "amount": "42.50"}' 
+ </msg>
+<msg time="2026-01-25T17:59:59.075695" level="INFO">POST Response : url=http://localhost:5059/api/expenses 
+ status=201, reason=Created 
+ headers={'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 25 Jan 2026 16:59:58 GMT', 'Server': 'Kestrel', 'Location': 'http://localhost:5059/api/expenses/18a2c07a-b0d3-4f9d-b0c5-b960d1439557', 'Transfer-Encoding': 'chunked'} 
+ body={"id":"18a2c07a-b0d3-4f9d-b0c5-b960d1439557","createdByUserId":"11111111-1111-1111-1111-111111111111","title":"Taxi","amount":42.50,"status":0,"createdAtUtc":"2026-01-25T16:59:59.064486Z"} 
+ </msg>
+<msg time="2026-01-25T17:59:59.075778" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/api/expenses</arg>
+<arg>json=${payload}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.058863" elapsed="0.016930"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.076293" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>201</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.075932" elapsed="0.000402"/>
+</kw>
+<status status="PASS" start="2026-01-25T17:59:59.057651" elapsed="0.018793"/>
+</test>
+<test id="s1-s1-t2" name="Create Draft Expense Without Header" line="28">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2026-01-25T17:59:59.077390" level="INFO">Creating Session using : alias=api, url=http://localhost:5059, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2026-01-25T17:59:59.076766" elapsed="0.000718"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.077696" level="INFO">${payload} = {'title': 'Taxi', 'amount': '42.50'}</msg>
+<var>${payload}</var>
+<arg>title=Taxi</arg>
+<arg>amount=42.50</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.077576" elapsed="0.000133"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-01-25T17:59:59.079910" level="INFO">POST Request : url=http://localhost:5059/api/expenses 
+ path_url=/api/expenses 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '36', 'Content-Type': 'application/json'} 
+ body=b'{"title": "Taxi", "amount": "42.50"}' 
+ </msg>
+<msg time="2026-01-25T17:59:59.079945" level="INFO">POST Response : url=http://localhost:5059/api/expenses 
+ status=400, reason=Bad Request 
+ headers={'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 25 Jan 2026 16:59:58 GMT', 'Server': 'Kestrel', 'Transfer-Encoding': 'chunked'} 
+ body={"title":"Bad request","status":400,"detail":"Missing or invalid X-Actor-UserId header (must be a GUID)."} 
+ </msg>
+<msg time="2026-01-25T17:59:59.080013" level="INFO">${response} = &lt;Response [400]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/api/expenses</arg>
+<arg>json=${payload}</arg>
+<arg>expected_status=400</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.077788" elapsed="0.002240"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.080456" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>400</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.080137" elapsed="0.000353"/>
+</kw>
+<status status="PASS" start="2026-01-25T17:59:59.076566" elapsed="0.004022"/>
+</test>
+<test id="s1-s1-t3" name="Create Draft Expense With Invalid Payload" line="44">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.081037" level="INFO">${headers} = {'Content-Type': 'application/json', 'X-Actor-UserId': '11111111-1111-1111-1111-111111111111'}</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>X-Actor-UserId=${USER_ID}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.080895" elapsed="0.000156"/>
+</kw>
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2026-01-25T17:59:59.081274" level="INFO">Creating Session using : alias=api, url=http://localhost:5059, headers={'Content-Type': 'application/json', 'X-Actor-UserId': '11111111-1111-1111-1111-111111111111'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<arg>headers=${headers}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2026-01-25T17:59:59.081129" elapsed="0.000235"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.081614" level="INFO">${payload} = {'title': '', 'amount': '-5'}</msg>
+<var>${payload}</var>
+<arg>title=</arg>
+<arg>amount=-5</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.081487" elapsed="0.000142"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-01-25T17:59:59.083948" level="INFO">POST Request : url=http://localhost:5059/api/expenses 
+ path_url=/api/expenses 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'X-Actor-UserId': '11111111-1111-1111-1111-111111111111', 'Content-Length': '29'} 
+ body=b'{"title": "", "amount": "-5"}' 
+ </msg>
+<msg time="2026-01-25T17:59:59.084044" level="INFO">POST Response : url=http://localhost:5059/api/expenses 
+ status=400, reason=Bad Request 
+ headers={'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 25 Jan 2026 16:59:58 GMT', 'Server': 'Kestrel', 'Transfer-Encoding': 'chunked'} 
+ body={"title":"Domain rule violated","status":400,"detail":"Title is required.","code":"MissingRequiredField"} 
+ </msg>
+<msg time="2026-01-25T17:59:59.084118" level="INFO">${response} = &lt;Response [400]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/api/expenses</arg>
+<arg>json=${payload}</arg>
+<arg>expected_status=400</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.081719" elapsed="0.002413"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.084581" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>400</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.084264" elapsed="0.000349"/>
+</kw>
+<status status="PASS" start="2026-01-25T17:59:59.080696" elapsed="0.004009"/>
+</test>
+<test id="s1-s1-t4" name="Submit Draft Expense" line="63">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.085130" level="INFO">${headers} = {'Content-Type': 'application/json', 'X-Actor-UserId': '11111111-1111-1111-1111-111111111111'}</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>X-Actor-UserId=${USER_ID}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.084991" elapsed="0.000152"/>
+</kw>
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2026-01-25T17:59:59.085344" level="INFO">Creating Session using : alias=api, url=http://localhost:5059, headers={'Content-Type': 'application/json', 'X-Actor-UserId': '11111111-1111-1111-1111-111111111111'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<arg>headers=${headers}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2026-01-25T17:59:59.085219" elapsed="0.000214"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.085614" level="INFO">${payload} = {'title': 'Hotel', 'amount': '120.00'}</msg>
+<var>${payload}</var>
+<arg>title=Hotel</arg>
+<arg>amount=120.00</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.085514" elapsed="0.000113"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-01-25T17:59:59.090173" level="INFO">POST Request : url=http://localhost:5059/api/expenses 
+ path_url=/api/expenses 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'X-Actor-UserId': '11111111-1111-1111-1111-111111111111', 'Content-Length': '38'} 
+ body=b'{"title": "Hotel", "amount": "120.00"}' 
+ </msg>
+<msg time="2026-01-25T17:59:59.090227" level="INFO">POST Response : url=http://localhost:5059/api/expenses 
+ status=201, reason=Created 
+ headers={'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 25 Jan 2026 16:59:58 GMT', 'Server': 'Kestrel', 'Location': 'http://localhost:5059/api/expenses/66c08f63-5e6b-41d3-9851-144d409933e2', 'Transfer-Encoding': 'chunked'} 
+ body={"id":"66c08f63-5e6b-41d3-9851-144d409933e2","createdByUserId":"11111111-1111-1111-1111-111111111111","title":"Hotel","amount":120.00,"status":0,"createdAtUtc":"2026-01-25T16:59:59.087289Z"} 
+ </msg>
+<msg time="2026-01-25T17:59:59.090305" level="INFO">${create} = &lt;Response [201]&gt;</msg>
+<var>${create}</var>
+<arg>api</arg>
+<arg>/api/expenses</arg>
+<arg>json=${payload}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.085703" elapsed="0.004617"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.090779" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${create.status_code}</arg>
+<arg>201</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.090458" elapsed="0.000353"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.091177" level="INFO">${expense_id} = 66c08f63-5e6b-41d3-9851-144d409933e2</msg>
+<var>${expense_id}</var>
+<arg>${create.json()["id"]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.090896" elapsed="0.000294"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-01-25T17:59:59.287903" level="INFO">POST Request : url=http://localhost:5059/api/expenses/66c08f63-5e6b-41d3-9851-144d409933e2/submit 
+ path_url=/api/expenses/66c08f63-5e6b-41d3-9851-144d409933e2/submit 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'X-Actor-UserId': '11111111-1111-1111-1111-111111111111', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-01-25T17:59:59.287953" level="INFO">POST Response : url=http://localhost:5059/api/expenses/66c08f63-5e6b-41d3-9851-144d409933e2/submit 
+ status=204, reason=No Content 
+ headers={'Date': 'Sun, 25 Jan 2026 16:59:58 GMT', 'Server': 'Kestrel'} 
+ body=None 
+ </msg>
+<msg time="2026-01-25T17:59:59.288038" level="INFO">${submit} = &lt;Response [204]&gt;</msg>
+<var>${submit}</var>
+<arg>api</arg>
+<arg>/api/expenses/${expense_id}/submit</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.091267" elapsed="0.196787"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-01-25T17:59:59.288608" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${submit.status_code}</arg>
+<arg>204</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-01-25T17:59:59.288206" elapsed="0.000441"/>
+</kw>
+<status status="PASS" start="2026-01-25T17:59:59.084813" elapsed="0.203938"/>
+</test>
+<status status="PASS" start="2026-01-25T17:59:59.014445" elapsed="0.274556"/>
+</suite>
+<status status="PASS" start="2026-01-25T17:59:59.003440" elapsed="0.285858"/>
+</suite>
+<statistics>
+<total>
+<stat pass="4" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="4" fail="0" skip="0" id="s1" name="Suites">Suites</stat>
+<stat pass="4" fail="0" skip="0" id="s1-s1" name="Expense Workflow">Suites.Expense Workflow</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
