@@ -1,6 +1,12 @@
 # Audit Ready Expense API
 
 ![CI](../../actions/workflows/ci.yml/badge.svg)
+## Testing
+
+This repository contains:
+- **Unit tests** for domain rules
+- **Integration tests** (API + PostgreSQL via Testcontainers)
+- **Robot Framework** regression tests (blackbox) with HTML reports (added next)
 
 A backend-focused expense workflow API built with **ASP.NET Core (.NET 10)**, designed to demonstrate **clean software engineering**, **domain-driven design**, and **production-grade testing**.
 
